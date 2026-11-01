@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Fake xcodegen: makes <name>.xcodeproj from project.yml's name.
+echo "xcodegen $*" >>"$STUB_LOG"
+mkdir -p "$(sed -nE 's/^name: *//p' project.yml).xcodeproj"

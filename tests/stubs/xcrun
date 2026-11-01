@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+echo "xcrun $*" >>"$STUB_LOG"

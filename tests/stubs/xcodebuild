@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Fake xcodebuild: logs the call; an archive makes its .xcarchive, an export
+# drops an .ipa (iOS archive) or .pkg (anything else) in the export path.
+echo "xcodebuild $*" >>"$STUB_LOG"
+archive="" export_path="" exporting=0
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -archivePath) archive="$2"; shift ;;
+        -exportPath) export_path="$2"; shift ;;
+        -exportArchive) exporting=1 ;;
+    esac
+    shift
+done
+if [ "$exporting" -eq 1 ]; then
+    case "$archive" in *-ios.xcarchive) ext=ipa ;; *) ext=pkg ;; esac
+    touch "$export_path/App.$ext"
+elif [ -n "$archive" ]; then
+    mkdir -p "$archive"
+fi

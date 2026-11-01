@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Fake gh: logs the call; PRs "merge" by pushing the branch to origin's main,
+# releases are remembered in $STUB_STATE.
+echo "gh $*" >>"$STUB_LOG"
+state() { printf '%s/release-%s' "$STUB_STATE" "${1//\//_}"; }
+case "$1 $2" in
+    "pr create") echo "https://github.com/example/demo/pull/1" ;;
+    "pr merge") git push --quiet origin "$3:main" ;;
+    "pr checks") exit "${STUB_CHECKS_RC:-0}" ;;
+    "pr view") echo MERGED ;;
+    "release view") [ -f "$(state "$3")" ] ;;
+    "release create") touch "$(state "$3")" ;;
+    *) echo "fake gh: unhandled: $*" >&2; exit 1 ;;
+esac

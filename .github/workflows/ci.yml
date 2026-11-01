@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Shellcheck & tests
+    # macOS: the scripts target its bash 3.2 and BSD sed, and the tests run them.
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install shellcheck
+        run: command -v shellcheck >/dev/null || brew install shellcheck
+      - name: shellcheck
+        run: shellcheck -S warning install.sh lib/*.sh tests/*.sh tests/stubs/*
+      - name: Tests
+        run: tests/run.sh

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+echo "  hasAlpha: ${STUB_ICON_ALPHA:-no}"
