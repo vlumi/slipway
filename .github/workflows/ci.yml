@@ -19,6 +19,6 @@ jobs:
       - name: Install shellcheck
         run: command -v shellcheck >/dev/null || brew install shellcheck
       - name: shellcheck
-        run: shellcheck -S warning install.sh lib/*.sh tests/*.sh tests/stubs/*
+        run: shellcheck -S warning install.sh lib/*.sh scripts/*.sh tests/*.sh tests/stubs/*
       - name: Tests
         run: tests/run.sh
