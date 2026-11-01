@@ -4,6 +4,8 @@ All notable changes to slipway are documented here. The format is based on [Keep
 
 ## [Unreleased]
 
+- **`make slipway-check` ignores `.DS_Store`**: the file Finder leaves in a folder it has shown is no longer reported as an addition to the copy.
+
 ## [0.1.1] — 2026-11-01
 
 - **`make slipway-update` is quiet**: git's detached-HEAD notice and its warning about the annotated tag no longer bury the result; they show only when the fetch fails.

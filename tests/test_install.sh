@@ -24,6 +24,13 @@ test_added_file_fails_the_check() {
     assert_contains "$OUT" "added: extra.sh"
 }
 
+test_finders_ds_store_is_not_an_edit() {
+    new_project ios
+    : >Scripts/slipway/.DS_Store
+    out="$(make --no-print-directory slipway-check)"
+    assert_contains "$out" "unmodified"
+}
+
 test_update_from_a_checkout_restores_the_copy() {
     new_project ios
     echo "# local fix" >>Scripts/slipway/release-tag.sh

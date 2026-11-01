@@ -23,7 +23,7 @@ mkdir -p "$staging"
 cp -p "$src"/lib/* "$staging/"
 cp -p "$src/README.md" "$staging/README.md"
 printf '%s\n' "$version" >"$staging/VERSION"
-(cd "$staging" && find . -type f ! -name MANIFEST | sed 's#^\./##' | LC_ALL=C sort | xargs shasum -a 256 >MANIFEST)
+(cd "$staging" && find . -type f ! -name MANIFEST ! -name .DS_Store | sed 's#^\./##' | LC_ALL=C sort | xargs shasum -a 256 >MANIFEST)
 
 # Swap the whole directory in one rename: a script that is running from the old
 # copy (update.sh, mid-update) keeps reading the file it opened.

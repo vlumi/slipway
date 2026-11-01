@@ -10,7 +10,8 @@ die() { echo "error: $*" >&2; exit 1; }
 [ -f MANIFEST ] || die "Scripts/slipway has no MANIFEST — reinstall it with \`make slipway-update\`."
 changed="$(shasum -a 256 -c MANIFEST 2>/dev/null | grep -v ': OK$' || true)"
 listed="$(awk '{ print $2 }' MANIFEST | LC_ALL=C sort)"
-present="$(find . -type f ! -name MANIFEST | sed 's#^\./##' | LC_ALL=C sort)"
+# Finder drops .DS_Store into any folder it shows; that's not an edit.
+present="$(find . -type f ! -name MANIFEST ! -name .DS_Store | sed 's#^\./##' | LC_ALL=C sort)"
 added="$(comm -13 <(echo "$listed") <(echo "$present"))"
 
 if [ -n "$changed" ] || [ -n "$added" ]; then
