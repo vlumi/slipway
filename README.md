@@ -42,7 +42,7 @@ Flat `key: value` and `key: [a, b]` lines, `#` comments. Quote a value that
 contains `#`.
 
 | Key | Default | |
-|---|---|---|
+| --- | --- | --- |
 | `name` | required | `<name>.xcodeproj`, `<name>-iOS`, … |
 | `display_name` | `name` | tag messages and GitHub release titles |
 | `core_package` | `<name>Core` | `Packages/<core>/`, for tests and formatting |
@@ -134,7 +134,7 @@ projects that need it — never edit a project's copy.
 
 ```sh
 tests/run.sh             # all tests; tests/run.sh <filter> for some
-shellcheck -S warning install.sh lib/*.sh tests/*.sh tests/stubs/*
+shellcheck -S warning install.sh lib/*.sh scripts/*.sh tests/*.sh tests/stubs/*
 ```
 
 The tests build small projects (iOS, iOS + macOS, iOS + macOS + watchOS) with a
@@ -142,4 +142,20 @@ local bare repo as origin and fake `gh`, `xcodebuild`, `xcrun` and `xcodegen`,
 and run the real targets — the whole release lane included — against them.
 
 The scripts run on macOS's own bash 3.2: no associative arrays, `mapfile` or
-`${x,,}`. A release is a `vX.Y.Z` tag with its entry in `CHANGELOG.md`.
+`${x,,}`.
+
+### Releasing slipway
+
+A change to `lib/` — what the projects run — writes its entry under
+`## [Unreleased]` in `CHANGELOG.md`. The rest (`scripts/`, `tests/`, CI, a
+docs-only README change) gets no entry and no release of its own; the README
+reaches the projects with the next release that has one.
+
+```sh
+scripts/release.sh 0.2.0
+```
+
+It files Unreleased under `## [0.2.0] — <date>` in a release PR, waits for it
+to merge, tags that merge commit `v0.2.0` — so the tagged changelog has the
+heading — and publishes a GitHub release with that section as its notes. If it
+stops partway, run it again: it picks up at the step that's missing.
