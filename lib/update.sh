@@ -22,6 +22,10 @@ fi
 [ -n "$version" ] || die "say which version: make slipway-update V=vX.Y.Z (or SLIPWAY_SRC=<checkout>)"
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
-git clone --quiet --depth 1 --branch "$version" "$repo" "$tmp/slipway" \
-    || die "couldn't fetch slipway $version from $repo"
+# A shallow clone of a tag talks even with --quiet (detached HEAD, "not a
+# commit" for an annotated tag); keep that for when it actually failed.
+if ! out="$(git -c advice.detachedHead=false clone --quiet --depth 1 --branch "$version" "$repo" "$tmp/slipway" 2>&1)"; then
+    echo "$out" >&2
+    die "couldn't fetch slipway $version from $repo"
+fi
 "$tmp/slipway/install.sh" "$(pwd)" "$version"

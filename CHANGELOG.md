@@ -4,6 +4,10 @@ All notable changes to slipway are documented here. The format is based on [Keep
 
 ## [Unreleased]
 
+## [0.1.1] — 2026-11-01
+
+- **`make slipway-update` is quiet**: git's detached-HEAD notice and its warning about the annotated tag no longer bury the result; they show only when the fetch fails.
+
 ## [0.1.0] — 2026-11-01
 
 The first version, gathered from the release lanes of the projects that used to carry their own copy.
