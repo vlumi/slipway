@@ -42,7 +42,7 @@ Flat `key: value` and `key: [a, b]` lines, `#` comments. Quote a value that
 contains `#`.
 
 | Key | Default | |
-|---|---|---|
+| --- | --- | --- |
 | `name` | required | `<name>.xcodeproj`, `<name>-iOS`, … |
 | `display_name` | `name` | tag messages and GitHub release titles |
 | `core_package` | `<name>Core` | `Packages/<core>/`, for tests and formatting |
