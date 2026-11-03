@@ -4,6 +4,8 @@ All notable changes to slipway are documented here. The format is based on [Keep
 
 ## [Unreleased]
 
+- **The App Store Connect sync**, from the projects' copies: `make asc-listing` writes the listing text from `Scripts/asc/listing.json`, and `make asc-screenshots` the captures in `shots/` in `Scripts/asc/shots.json`'s store order, each a dry run unless `-apply`. Only the screenshots that changed are uploaded, matched by MD5, so the rest aren't processed again; `ALL=1` replaces every one. iPhone, iPad, Mac and Watch sets, one language or several.
+
 ## [0.1.2] — 2026-11-01
 
 - **`make slipway-check` ignores `.DS_Store`**: the file Finder leaves in a folder it has shown is no longer reported as an addition to the copy.
