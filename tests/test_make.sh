@@ -65,5 +65,5 @@ test_release_sections_come_after_the_projects() {
     new_project ios
     printf '\n##@ Run\nrun:  ## Run it\n' >>Makefile
     sections="$(help_text | grep -vE '^( |$)' | sed 1d | xargs)"
-    assert_eq "General Build & test Run Release slipway" "$sections"
+    assert_eq "General Build & test Run Release App Store slipway" "$sections"
 }

@@ -126,6 +126,28 @@ release-distribute-retry:  ## Re-distribute an already-tagged release (no PR/tag
 release-upload:  ## Upload the already-built dist/ package (no rebuild)
 	@$(SLIPWAY_DIR)/release-distribute.sh $(PLATFORM) --upload-only
 
+##@> App Store
+##~ Text from Scripts/asc/listing.json, screenshots from shots/ in Scripts/asc/shots.json's store order
+# The bare targets are dry runs; -apply writes. Every editable version is
+# written (Prepare for Submission, rejected); one in review or live is skipped.
+SLIPWAY_ASC_ALL := $(if $(filter 1,$(ALL)),--all,)
+
+.PHONY: asc-listing
+asc-listing:  ## Show what the listing text would change in App Store Connect
+	@$(SLIPWAY_DIR)/asc.sh listing
+
+.PHONY: asc-listing-apply
+asc-listing-apply:  ## Write the listing text to App Store Connect
+	@$(SLIPWAY_DIR)/asc.sh listing --apply
+
+.PHONY: asc-screenshots
+asc-screenshots:  ## Show the screenshot upload plan: only the shots that changed (ALL=1: every shot)
+	@$(SLIPWAY_DIR)/asc.sh screens $(SLIPWAY_ASC_ALL)
+
+.PHONY: asc-screenshots-apply
+asc-screenshots-apply:  ## Upload the changed screenshots, drop the stale, reorder (ALL=1 replaces every shot)
+	@$(SLIPWAY_DIR)/asc.sh screens --apply $(SLIPWAY_ASC_ALL)
+
 ##@> slipway
 .PHONY: slipway-check
 slipway-check:  ## Verify Scripts/slipway is an unmodified copy of its recorded version

@@ -70,6 +70,8 @@ Targets for a platform the project doesn't build don't exist, and aren't listed.
 - **Release:** `release`, `release-build`, the four steps
   (`release-preflight`, `-publish`, `-tag`, `-distribute`),
   `release-distribute-retry`, `release-upload`
+- **App Store:** `asc-listing`, `asc-screenshots` (dry runs), and each with
+  `-apply` to write
 - **slipway:** `slipway-check`, `slipway-update`
 
 ### Hooking in
@@ -117,6 +119,32 @@ building or only the upload.
 changes it also writes the new version's heading, keeping the old heading (and
 any text under it) over the builds it shipped. If Unreleased is empty but code
 changed since the last tag, it asks before releasing without notes.
+
+## App Store Connect
+
+The listing text and the screenshots go to App Store Connect from the repo,
+never by hand in the ASC UI. The project keeps the data; slipway the code:
+
+- `Scripts/asc/listing.json`: `bundleId`, then `appInfo` (name, subtitle,
+  privacy URL) and `version` (description, keywords, promotional text, what's
+  new, URLs), each keyed by ASC locale.
+- `Scripts/asc/shots.json`: `"store": [<shot>, …]`, the carousel order. A shot
+  under `"shots"` with `"platforms": [...]` is left out of the others; any other
+  fields are the project's own (its capture script's, say).
+- `shots/<platform>/<lang>/<shot>-<platform>.png`, the captures, with platform
+  `iphone`, `ipad`, `mac` or `watch` at the store's sizes. An app in one
+  language can leave out `<lang>/`; that reads as English.
+
+`make asc-listing` and `make asc-screenshots` show what would change, and
+`-apply` writes it to every editable version. A screenshot set gets only the
+shots whose file differs from what it holds (by MD5), loses the ones no file
+matches and is put in store order, so one retaken screen doesn't send the rest
+through ASC's processing again; `ALL=1` replaces every shot. A capture at the
+wrong size stops the run before anything is touched, since ASC would accept it
+and then fail to process it.
+
+The credentials are the release lane's (`Scripts/.asc-config`). The Python runs
+in a venv shared by every project, `~/.venvs/slipway-asc`, made on first use.
 
 ## Updating and checking
 
